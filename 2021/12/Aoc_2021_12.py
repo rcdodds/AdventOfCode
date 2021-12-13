@@ -40,7 +40,7 @@ if __name__ == '__main__':
     # Puzzle info
     (year, day) = (2021, 12)
     puzzle = Puzzle(year=year, day=day)
-    puzzle_solution = {'A': {'solved': puzzle.answered_a, 'guess': 0}, 'B': {'solved': False, 'guess': 0}}
+    puzzle_solution = {'A': {'solved': puzzle.answered_a, 'guess': 0}, 'B': {'solved': puzzle.answered_b, 'guess': 0}}
     ready_to_solve = True
 
     # Format puzzle input
