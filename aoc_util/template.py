@@ -3,32 +3,26 @@ from aocd.models import Puzzle
 from aocd import submit
 
 
-def solve_puzzle(pzl_data, letter):
-    # Format puzzle input
-    puzzle_data = pzl_data.split('\n')
+def solve_puzzle_part_a(puzzle_data):
+    return 0
 
-    if letter == 'A':
-        return 0
 
-    elif letter == 'B':
-        return 0
+def solve_puzzle_part_b(puzzle_data):
+    return 0
 
 
 if __name__ == '__main__':
-    # Puzzle info
-    ready_to_solve = False
-    (year, day) = (2021, 20)
+    # Get & format puzzle data
+    (year, day) = (2021, 1)
     puzzle = Puzzle(year=year, day=day)
-    puzzle_solution = {'A': {'solved': puzzle.answered_a, 'guess': 0}, 'B': {'solved': puzzle.answered_b, 'guess': 0}}
+    puzzle_data = puzzle.input_data.split('\n')
 
-    # Consider both puzzles
-    for part in ['A', 'B']:
-        if not puzzle_solution[part]['solved']:
-            # Attempt solution
-            guess = solve_puzzle(puzzle.input_data, part)
-            puzzle_solution[part]['guess'] = guess
-            print('Guess for puzzle {}: {}'.format(part, guess))
-
-            # Submit if ready
-            if ready_to_solve and guess != 0:
-                submit(guess, part=part, year=year, day=day)
+    # Solve a part of the puzzle
+    if not puzzle.answered_a:
+        submit(solve_puzzle_part_a(puzzle_data), part='A', year=year, day=day)
+    elif not puzzle.answered_b:
+        submit(solve_puzzle_part_b(puzzle_data), part='B', year=year, day=day)
+    else:
+        print(f'Puzzle for year {year} // day {day} already solved!\n'
+              f'Answer for part A = {puzzle.answer_a}\n'
+              f'Answer for part B = {puzzle.answer_b}')
