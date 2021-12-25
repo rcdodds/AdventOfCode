@@ -45,5 +45,5 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Day 22 |  |  |  |  |  |  |  |
 | Day 23 |  |  |  |  |  |  |  |
 | Day 24 |  |  |  |  |  |  |  |
-| Day 25 |  |  |  |  |  |  |  |
+| Day 25 |  |  |  |  |  |  | 1 of 1 |
 
