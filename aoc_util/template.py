@@ -3,26 +3,39 @@ from aocd.models import Puzzle
 from aocd import submit
 
 
-def solve_puzzle_part_a(puzzle_data):
-    return 0
+def solve_part_a(part_a_input):
+    pass
 
 
-def solve_puzzle_part_b(puzzle_data):
-    return 0
+def solve_part_b(part_b_input):
+    pass
 
 
 if __name__ == '__main__':
-    # Get & format puzzle data
-    (year, day) = (2021, 1)
-    puzzle = Puzzle(year=year, day=day)
-    puzzle_data = puzzle.input_data.split('\n')
+    # Puzzle info
+    testing = False
+    ready_to_solve = True
+    (year, day) = (2020, 17)
+    pzl = Puzzle(year=year, day=day)
+    pzl_dict = {'A': {'solved': pzl.answered_a,
+                      'answer': pzl.answer_a if pzl.answered_a else None,
+                      'solve_func': solve_part_a},
+                'B': {'solved': pzl.answered_b,
+                      'answer': pzl.answer_b if pzl.answered_b else None,
+                      'solve_func': solve_part_b}}
 
-    # Solve a part of the puzzle
-    if not puzzle.answered_a:
-        submit(solve_puzzle_part_a(puzzle_data), part='A', year=year, day=day)
-    elif not puzzle.answered_b:
-        submit(solve_puzzle_part_b(puzzle_data), part='B', year=year, day=day)
-    else:
-        print(f'Puzzle for year {year} // day {day} already solved!\n'
-              f'Answer for part A = {puzzle.answer_a}\n'
-              f'Answer for part B = {puzzle.answer_b}')
+    # Test inputs
+    test_data = ''
+
+    # Consider both puzzles
+    for part in pzl_dict.keys():
+        if pzl_dict[part]['solved']:
+            print(f'Year {year} Day {day} Part {part} already solved with answer = {pzl_dict[part]["answer"]}')
+        else:
+            # Attempt solution
+            pzl_dict[part]['answer'] = pzl_dict[part]['solve_func'](pzl.input_data if not testing else test_data)
+            print(f'Year {year} Day {day} Part {part} answer = {pzl_dict[part]["answer"]}')
+
+            # Submit if ready
+            if ready_to_solve and pzl_dict[part]['answer']:
+                submit(pzl_dict[part]['answer'], part=part, year=year, day=day)
