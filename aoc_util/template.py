@@ -13,8 +13,7 @@ def solve_part_b(part_b_input):
 
 if __name__ == '__main__':
     # Puzzle info
-    testing = False
-    ready_to_solve = True
+    test, solve, backtest = (False, True, False)
     (year, day) = (2020, 17)
     pzl = Puzzle(year=year, day=day)
     pzl_dict = {'A': {'solved': pzl.answered_a,
@@ -29,13 +28,13 @@ if __name__ == '__main__':
 
     # Consider both puzzles
     for part in pzl_dict.keys():
-        if pzl_dict[part]['solved']:
+        if pzl_dict[part]['solved'] and not backtest:
             print(f'Year {year} Day {day} Part {part} already solved with answer = {pzl_dict[part]["answer"]}')
         else:
             # Attempt solution
-            pzl_dict[part]['answer'] = pzl_dict[part]['solve_func'](pzl.input_data if not testing else test_data)
+            pzl_dict[part]['answer'] = pzl_dict[part]['solve_func'](pzl.input_data if not test else test_data)
             print(f'Year {year} Day {day} Part {part} answer = {pzl_dict[part]["answer"]}')
 
             # Submit if ready
-            if ready_to_solve and pzl_dict[part]['answer']:
+            if solve and pzl_dict[part]['answer']:
                 submit(pzl_dict[part]['answer'], part=part, year=year, day=day)
