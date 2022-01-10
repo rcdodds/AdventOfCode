@@ -41,7 +41,7 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Day 18 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 19 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 20 |  |  |  |  |  |  | 2 of 2 |
-| Day 21 |  |  |  |  |  |  | 2 of 2 |
+| Day 21 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 22 |  |  |  |  |  |  |  |
 | Day 23 |  |  |  |  |  |  | 2 of 2 |
 | Day 24 |  |  |  |  |  |  |  |
