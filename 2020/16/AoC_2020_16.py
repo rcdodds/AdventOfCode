@@ -28,7 +28,7 @@ def solve_puzzle(pzl_data, letter):
     field_dict = {}
     for match in re.findall(field_name_regex, pzl_data[0]):
         field_dict[match[0]] = {'range1': tuple(map(int, match[1:3])),
-                                   'range2': tuple(map(int, match[3:5]))}
+                                'range2': tuple(map(int, match[3:5]))}
 
     # Split my ticket into list of ints
     my_ticket = [int(x) for x in pzl_data[1].split('\n')[-1].split(',')]
@@ -47,14 +47,39 @@ def solve_puzzle(pzl_data, letter):
         return np.sum(nearby_ticket_array * invalid_ticket_mask).astype(int)
 
     elif letter == 'B':
-        # Use first valid row of the ticket array for determining field order
-        for i in range(valid_ticket_mask.shape[0]):
-            if np.sum(valid_ticket_mask[i]) == len(valid_ticket_mask[i]):
-                ticket = nearby_ticket_array[i]
-                break
+        # Remove invalid tickets
+        valid_tickets = nearby_ticket_array[~np.any(valid_ticket_mask == 0, axis=1)]
 
+        # Find all possible options for each column
+        column_options = {}
+        for col_num in range(len(valid_tickets[0])):
+            col_vals = valid_tickets[:, col_num]
+            col_opts = set()
+            for field in field_dict.items():
+                in_ranges = [cv for cv in col_vals if field[1]['range1'][0] <= cv <= field[1]['range1'][1] or
+                                                        field[1]['range2'][0] <= cv <= field[1]['range2'][1]]
+                out_ranges = [cv for cv in col_vals if cv not in in_ranges]
+                if len(col_vals) == len(in_ranges):
+                    col_opts.add(field[0])
+            column_options[col_num] = col_opts
+        
+        # Reduce the possible mappings by considering everything uniquely identified
+        while max(map(len, column_options.values())) > 1:
+            for guessed in [g[1].copy().pop() for g in column_options.items() if len(g[1]) == 1]:
+                for unknown in column_options.keys():
+                    if guessed in column_options[unknown] and len(column_options[unknown]) > 1:
+                        column_options[unknown].remove(guessed)
 
-        return 0
+        # Replace sets with the definitive column headers
+        for i in column_options.keys():
+            column_options[i] = column_options[i].pop()
+
+        result = 1
+        for column_header in column_options.items():
+            if column_header[1].find('departure') != -1:
+                result *= my_ticket[column_header[0]]
+
+        return result
 
 
 if __name__ == '__main__':
@@ -66,6 +91,14 @@ if __name__ == '__main__':
 
     # Format puzzle input
     puzzle_data = puzzle.input_data.split('\n\n')
+    # puzzle_data = 'class: 0-1 or 4-19\n' \
+    #               'row: 0-5 or 8-19\n' \
+    #               'seat: 0-13 or 16-19\n\n' \
+    #               'your ticket:\n11,12,13\n\n' \
+    #               'nearby tickets:\n' \
+    #               '3,9,18\n' \
+    #               '15,1,5\n' \
+    #               '5,14,9'.split('\n\n')
 
     # Consider both puzzles
     for part in ['A', 'B']:
