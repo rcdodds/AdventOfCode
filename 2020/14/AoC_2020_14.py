@@ -1,17 +1,6 @@
-# Standard functionality
-from functools import lru_cache
-import re
-import itertools
-import datetime
-import json
-
-# Additional libraries
-import pandas as pd
-import numpy as np
-
-# Advent of Code libraries
 from aocd.models import Puzzle
 from aocd import submit
+import itertools
 
 
 class InvalidPuzzleTypeError(Exception):
@@ -66,38 +55,27 @@ def expand_floating(floating_address):
     floating_bits = floating_address.count('X')
 
     # If there are no floating digits, just return the address
-    if floating_bits == -1:
+    if not floating_bits:
         addresses.append(floating_address)
     # Otherwise, return all possible variations
     else:
-        # Split address into non-floating chunks
-        non_floating_bits = floating_address.split('X')
         # Create all options for the floating bits
         bit_replacements = [list(a) for a in itertools.product(['0', '1'], repeat=floating_bits)]
         # Create all concatenations
         for option in bit_replacements:
-            zipped_list = [''.join(combo) for combo in zip(non_floating_bits, option)]
-            address = ''.join(zipped_list)
-            addresses.append(address)
-
+            new_address = floating_address
+            for digit in option:
+                new_address = new_address.replace('X', digit, 1)
+            addresses.append(new_address)
     return addresses
 
 
 def solve_puzzle(pzl_data, letter):
-    # Testing
-    # pzl_data = [
-    #     'mask = 000000000000000000000000000000X1001X',
-    #     'mem[42] = 100',
-    #     'mask = 00000000000000000000000000000000X0XX',
-    #     'mem[26] = 1',
-    # ]
-
     # Dictionary of values in memory
     memory = {}
 
     if letter == 'A':
         current_mask = 'X' * 36     # Mask initially set to not overwrite anything
-
         # Loop through actions
         for action in pzl_data:
             # Update mask
@@ -110,31 +88,28 @@ def solve_puzzle(pzl_data, letter):
                 bit_str = decimal_to_36bit(dec_num)
                 masked_bit_str = apply_mask(bit_str, current_mask, 'X')
                 memory[memory_address] = masked_bit_str
+        return sum([value_string_to_decimal(mem) for mem in memory.values()])
 
     elif letter == 'B':
         current_mask = '0' * 36     # Mask initially set to not overwrite anything
-
         # Loop through actions
         for action in pzl_data:
             # Update mask
             if action.startswith('mask'):
                 current_mask = action.split(' ')[-1]
-
             # Write value to memory
             else:
                 memory_address = int(action[action.find('[') + 1:action.find(']')])
                 masked_addresses = expand_floating(apply_mask(decimal_to_36bit(memory_address), current_mask, '0'))
                 dec_num = int(action.split(' ')[-1])
-                bit_str = decimal_to_36bit(dec_num)
                 for mem_add in masked_addresses:
-                    memory[value_string_to_decimal(mem_add)] = bit_str
+                    memory[value_string_to_decimal(mem_add)] = dec_num
+        return sum(memory.values())
 
     else:
         # Invalid letter submitted
         print('Gasp! You tried to use a puzzle type that does not exist.')
         raise InvalidPuzzleTypeError
-
-    return sum([value_string_to_decimal(mem) for mem in memory.values()])
 
 
 if __name__ == '__main__':
@@ -148,7 +123,6 @@ if __name__ == '__main__':
 
     # Format puzzle input
     puzzle_data = puzzle_data.split('\n')
-    # puzzle_data = [int(puzzle_string) for puzzle_string in puzzle_data]
 
     # Consider both puzzles
     for part in ['A', 'B']:
