@@ -35,7 +35,7 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Day 12 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 13 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 14 |  |  |  |  |  | 2 of 2 | 2 of 2 |
-| Day 15 |  |  |  |  |  | 1 of 2 | 2 of 2 |
+| Day 15 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 16 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 17 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 18 |  |  |  |  |  | 2 of 2 | 2 of 2 |
