@@ -26,8 +26,6 @@ def solve_part_a(part_a_input):
 
 def solve_part_b(part_b_input):
     instructions = tuple(follow_instruction(row) for row in part_b_input.split('\n'))
-    for i in instructions:
-        assert sum(i) % 2 == 0
     black_tiles = {t for t in instructions if instructions.count(t) % 2 == 1}
 
     for day in range(100):
@@ -43,11 +41,8 @@ def solve_part_b(part_b_input):
                     elif (row, col) not in black_tiles and neighbor_count == 2:
                         new_black.add((row, col))
 
-        print(f'Black Tiles = {black_tiles}\nNew Black = {new_black}\nNew White = {new_white}')
-        print(len(black_tiles), len(new_black), len(new_white), len(black_tiles) + len(new_black) - len(new_white))
         black_tiles = black_tiles.union(new_black)
         black_tiles = black_tiles.difference(new_white)
-        print(len(black_tiles))
 
     return len(black_tiles)
 
