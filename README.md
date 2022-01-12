@@ -5,17 +5,6 @@
 ##### I discovered AoC in 2021 and I'll be attempting puzzles from prior years as well.
 
 ---
-
-#### Notable Utility Functions
-- Chinese Remainder Theorem
-    - Explanation of theorem
-- Depth-First Search (DFS)
-    - Find all paths between source / target nodes in an undirected graph
-- Array Extrema
-    - Find local minima in 2D Numpy array
-    
----
-
 #### My Completion Status
 Blank cells indicate puzzle has not been attempted (yet)
 
