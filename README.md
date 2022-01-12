@@ -43,7 +43,7 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Day 20 |  |  |  |  |  |  | 2 of 2 |
 | Day 21 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 22 |  |  |  |  |  | 2 of 2 |  |
-| Day 23 |  |  |  |  |  |  | 2 of 2 |
+| Day 23 |  |  |  |  |  | 2 of 2 | 2 of 2 |
 | Day 24 |  |  |  |  |  | 2 of 2 |  |
 | Day 25 |  |  |  |  |  | 1 of 1 | 1 of 1 |
 
