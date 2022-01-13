@@ -1,6 +1,9 @@
 # Libraries
 from aocd.models import Puzzle
 from aocd import submit
+import logging
+
+logging.basicConfig(level=logging.WARNING)
 
 
 def solve_part_a(part_a_input):
@@ -13,15 +16,13 @@ def solve_part_b(part_b_input):
 
 if __name__ == '__main__':
     # Puzzle info
-    test, solve, backtest = (False, True, False)
+    use_test_data, backtest = (False, True)
     (year, day) = (2020, 17)
     pzl = Puzzle(year=year, day=day)
-    pzl_dict = {'A': {'solved': pzl.answered_a,
-                      'answer': pzl.answer_a if pzl.answered_a else None,
-                      'solve_func': solve_part_a},
-                'B': {'solved': pzl.answered_b,
-                      'answer': pzl.answer_b if pzl.answered_b else None,
-                      'solve_func': solve_part_b}}
+    pzl_dict = {'A': {'solved': pzl.answered_a, 'solve_func': solve_part_a,
+                      'answer': pzl.answer_a if pzl.answered_a else None},
+                'B': {'solved': pzl.answered_b, 'solve_func': solve_part_b,
+                      'answer': pzl.answer_b if pzl.answered_b else None}}
 
     # Test inputs
     test_data = ''
@@ -32,9 +33,9 @@ if __name__ == '__main__':
             print(f'Year {year} Day {day} Part {part} already solved with answer = {pzl_dict[part]["answer"]}')
         else:
             # Attempt solution
-            pzl_dict[part]['answer'] = pzl_dict[part]['solve_func'](pzl.input_data if not test else test_data)
-            print(f'Year {year} Day {day} Part {part} answer = {pzl_dict[part]["answer"]}')
+            pzl_dict[part]['answer'] = pzl_dict[part]['solve_func'](pzl.input_data if not use_test_data else test_data)
+            print(f'Year {year} Day {day} Part {part} answer generated this run = {pzl_dict[part]["answer"]}')
 
             # Submit if ready
-            if solve and pzl_dict[part]['answer']:
+            if not use_test_data:
                 submit(pzl_dict[part]['answer'], part=part, year=year, day=day)
