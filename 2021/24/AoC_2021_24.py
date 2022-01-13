@@ -2,7 +2,6 @@
 from aocd.models import Puzzle
 from aocd import submit
 import itertools
-from functools import lru_cache
 
 # Global variables from puzzle input
 add_to_x = (15, 14, 11, -13, 14, 15, -7, 10, -12, 15, -16, -9, -8, -8)
@@ -21,61 +20,33 @@ def solve_puzzle_piece(input_digit, digit_pos, prior_z):
     y = (w + add_to_y[digit_pos]) * x           # X is either 0 / 1
     z += y
 
-    print(w, x, y, z)
-
     return z
 
 
-def solve_puzzle_part_a(alu_instructions):
-    # Loop through all possible 14-digit inputs (without 0 as digit) in decreasing order
-    for input_number_str in itertools.product('987654321', repeat=14):
-        # Initialize variables
-        input_number = int(''.join(input_number_str))
-        print(f'Validating {input_number}')
-        input_digits = [int(dig) for dig in str(input_number)]
-        result_z = 0
+def find_solution(digit_direction):
+    for input_number in itertools.product(digit_direction, repeat=7):
+        z_result = 0
+        input_counter = 0
+        output_number = []
 
-        # Loop through each input digit
-        for pos, dig in enumerate(input_digits):
-            result_z = solve_puzzle_piece(dig, pos, result_z)
+        for digit_number in range(14):
+            if add_to_x[digit_number] > 0:
+                in_digit = int(input_number[input_counter])
+                input_counter += 1
+            else:
+                in_digit = (z_result % 26) + add_to_x[digit_number]
 
-        # If z is still 0 after validating all digits, this is a valid solution
-        if result_z == 0:
-            return input_number
+            if 1 <= in_digit <= 9:
+                output_number.append(str(in_digit))
+                z_result = solve_puzzle_piece(in_digit, digit_number, z_result)
+            else:
+                break
 
+        if len(output_number) == 14:
+            print(f'Actual number = {"".join(output_number)} >>>\t\tz = {z_result}')
 
-        # # Loop through ALU applying each instruction
-        # for instruction in alu_instructions:
-        #     if instruction[0] == 'inp':
-        #         variables[instruction[1]] = input_digits[input_digits_used]
-        #         input_digits_used += 1
-        #     elif instruction[0] == 'add':
-        #         add_num = variables[instruction[2]] if instruction[2] in variables.keys() else int(instruction[2])
-        #         variables[instruction[1]] += add_num
-        #     elif instruction[0] == 'mul':
-        #         mul_num = variables[instruction[2]] if instruction[2] in variables.keys() else int(instruction[2])
-        #         variables[instruction[1]] += mul_num
-        #     elif instruction[0] == 'div':
-        #         div_num = variables[instruction[2]] if instruction[2] in variables.keys() else int(instruction[2])
-        #         assert div_num != 0
-        #         variables[instruction[1]] = variables[instruction[1]] // div_num
-        #     elif instruction[0] == 'mod':
-        #         mod_num = variables[instruction[2]] if instruction[2] in variables.keys() else int(instruction[2])
-        #         assert variables[instruction[1]] >= 0
-        #         assert mod_num > 0
-        #         variables[instruction[1]] = variables[instruction[1]] % mod_num
-        #     elif instruction[0] == 'eql':
-        #         eql_num = variables[instruction[2]] if instruction[2] in variables.keys() else int(instruction[2])
-        #         variables[instruction[1]] = int(variables[instruction[1]] == eql_num)
-        # print(variables)
-        #
-        # # Store results if number is valid
-        # if variables['z'] == 0:
-        #     return input_number
-
-
-def solve_puzzle_part_b(puzzle_data):
-    print('part b')
+        if not z_result and len(output_number) == 14:
+            return ''.join(output_number)
 
 
 if __name__ == '__main__':
@@ -86,9 +57,9 @@ if __name__ == '__main__':
 
     # Solve a part of the puzzle
     if not puzzle.answered_a:
-        submit(solve_puzzle_part_a(puzzle_data), part='A', year=year, day=day)
+        submit(find_solution('987654321'), part='A', year=year, day=day)
     elif not puzzle.answered_b:
-        submit(solve_puzzle_part_b(puzzle_data), part='B', year=year, day=day)
+        submit(find_solution('123456789'), part='B', year=year, day=day)
     else:
         print(f'Puzzle for year {year} // day {day} already solved!\n'
               f'Answer for part A = {puzzle.answer_a}\n'
