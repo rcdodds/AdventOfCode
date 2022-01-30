@@ -22,7 +22,7 @@ class IntcodeProgram:
                 'method': IntcodeProgram.get_input,
                 'params': 1,
                 'overwrite': False,
-                'consider_modes': False
+                'consider_modes': True
             },
             4: {
                 'method': IntcodeProgram.store_output,
@@ -53,6 +53,12 @@ class IntcodeProgram:
                 'params': 2,
                 'overwrite': True,
                 'consider_modes': True
+            },
+            9: {
+                'method': IntcodeProgram.adjust_relative_base,
+                'params': 1,
+                'overwrite': False,
+                'consider_modes': True
             }
         }
 
@@ -67,24 +73,16 @@ class IntcodeProgram:
 
         # Initial settings
         self.op_pos = 0
+        self.rel_base = 0
         self.outputs = []
 
     def run(self):
-        while self.read_values(num_values=1, consume=False) != 99:
+        while self.read_values(num_values=1, consume=False)[0] != 99:
             # Get opcode
-            op = self.read_values(1)
+            op = self.read_values(1)[0]
 
             # Construct instruction payload
-            instruction_payload = {'params': self.read_values(self.instructions[op % 100]['params'])}
-
-            # Add modes (if required)
-            if self.instructions[op % 100]['consider_modes']:
-                instruction_payload['modes'] = [(op % (1000 * 10 ** p)) // (100 * 10 ** p)
-                                                for p in range(self.instructions[op % 100]['params'])]
-
-            # Add destination address (if required)
-            if self.instructions[op % 100]['overwrite']:
-                instruction_payload['dest'] = self.read_values(1)
+            instruction_payload = self.construct_payload(op)
 
             # Perform instruction
             self.instructions[op % 100]['method'](self, **instruction_payload)
@@ -93,7 +91,47 @@ class IntcodeProgram:
         vals = self.program[self.op_pos: self.op_pos + num_values]
         if consume:
             self.op_pos += num_values
-        return vals[0] if len(vals) == 1 else vals
+        return vals
+
+    def construct_payload(self, opcode):
+        # Read parameter values
+        num_params = self.instructions[opcode % 100]['params']
+        parameters = self.read_values(num_params)
+        payload = {'params': parameters}
+
+        # Consider modes (if required)
+        if self.instructions[opcode % 100]['consider_modes']:
+            param_modes = [(opcode % (1000 * 10 ** p)) // (100 * 10 ** p) for p in range(num_params)]
+
+            # Adjust any parameters in relative mode
+            while 2 in param_modes:
+                param_index = param_modes.index(2)
+                param_modes[param_index] = 0
+                parameters[param_index] += self.rel_base
+
+            # Extend memory if parameters point outside of current program
+            for i, mode in enumerate(param_modes):
+                if mode == 0 and parameters[i] >= len(self.program):
+                    self.program.extend([0] * (parameters[i] - len(self.program) + 1))
+
+            # Store in payload dictionary
+            payload['modes'] = param_modes
+
+        # Add destination address (if required)
+        if self.instructions[opcode % 100]['overwrite']:
+            dest_address = self.read_values(1)[0]
+            # Slide if mode == 2
+            if (opcode % (1000 * 10 ** num_params)) // (100 * 10 ** num_params) == 2:
+                dest_address += self.rel_base
+
+            # Extend memory if result needs to be stored outside of current program
+            if dest_address >= len(self.program):
+                self.program.extend([0] * (dest_address - len(self.program) + 1))
+
+            # Store in payload dictionary
+            payload['dest'] = dest_address
+
+        return payload
 
     def addition(self, params, modes, dest):
         result = 0
@@ -107,19 +145,19 @@ class IntcodeProgram:
             result *= params[i] if modes[i] == 1 else self.program[params[i]]
         self.program[dest] = result
 
-    def get_input(self, params):
+    def get_input(self, params, modes):
         if self.input_values is None:
             raise IntcodeError('Input instruction encountered without input method set.')
 
         if isinstance(self.input_values, int):
-            self.program[params] = self.input_values
+            self.program[params[0]] = self.input_values
         elif isinstance(self.input_values, list):
-            self.program[params] = self.input_values.pop(0)
+            self.program[params[0]] = self.input_values.pop(0)
         else:
             raise IntcodeError('Parameter input_values is neither an integer constant nor a list.')
 
     def store_output(self, params, modes):
-        self.outputs.append(self.program[params] if modes[0] == 0 else params)
+        self.outputs.append(self.program[params[0]] if modes[0] == 0 else params[0])
 
     def jump_if_true(self, params, modes):
         if params[0] if modes[0] == 1 else self.program[params[0]]:
@@ -146,6 +184,9 @@ class IntcodeProgram:
             self.program[dest] = 1
         else:
             self.program[dest] = 0
+
+    def adjust_relative_base(self, params, modes):
+        self.rel_base += params[0] if modes[0] == 1 else self.program[params[0]]
 
     def get_diagnostic_code(self):
         if any(self.outputs[:-1]):

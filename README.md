@@ -18,7 +18,7 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Day 6  |      |      |      |      | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 7  |      |      |      |      | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 8  |      |      |      |      | 2 of 2 | 2 of 2 | 2 of 2 |
-| Day 9  |      |      |      |      |        | 2 of 2 | 2 of 2 |
+| Day 9  |      |      |      |      | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 10 |      |      |      |      |        | 2 of 2 | 2 of 2 |
 | Day 11 |      |      |      |      |        | 2 of 2 | 2 of 2 |
 | Day 12 |      |      |      |      |        | 2 of 2 | 2 of 2 |
