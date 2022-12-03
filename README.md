@@ -1,10 +1,5 @@
 # Advent of Code
 ---
-
-### My attempts at AoC puzzles from various years
-##### I discovered AoC in 2021 and I'll be attempting puzzles from prior years as well.
-
----
 #### My Completion Status
 Blank cells indicate puzzle has not been attempted (yet)
 
