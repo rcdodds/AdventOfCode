@@ -8,7 +8,7 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Day 1  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 2  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 3  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
-| Day 4  | 2 of 2 | 2 of 2 | 2 of 2 |        |
+| Day 4  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 5  | 2 of 2 | 2 of 2 | 2 of 2 |        |
 | Day 6  | 2 of 2 | 2 of 2 | 2 of 2 |        |
 | Day 7  | 2 of 2 | 2 of 2 | 2 of 2 |        |
