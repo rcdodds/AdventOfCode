@@ -6,7 +6,7 @@ Blank cells indicate puzzle has not been attempted (yet)
 | Year   | 2019   | 2020   | 2021   | 2022   | 2023   |
 |--------|--------|--------|--------|--------|--------|
 | Day 1  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
-| Day 2  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |        |
+| Day 2  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
 | Day 3  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |        |
 | Day 4  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |        |
 | Day 5  | 2 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |        |
